@@ -26,21 +26,23 @@ app.use(express.static('website'));
 // Callback function to complete GET '/all'
 app.get('/all', (req, res)=> {
     console.log('get all from the server');
-    res.status(200).send(projectData)
+    res.status(200).send(projectData);
 })
 
 // Post Data
-app.post('post', (req, res)=> {
+app.post('/post', (req, res)=> {
     console.log('post data to the server', req.body);
     projectData = {
-        temp: req.body.temp,
         date: req.body.date,
-        content: req.body.content
+        temp: req.body.temp,
+        feeling: req.body.feeling
     };
     res.status(200).send(projectData)
 })
 
 // Setup Server
-app.listen(3000, ()=> {
-    console.log('server is running on port 3000:');
+const port = 3000;
+
+app.listen(port, ()=> {
+    console.log('server is running on port', port, '...');
 })

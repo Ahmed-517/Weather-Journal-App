@@ -30,18 +30,25 @@
     </div>
 
     <div class="mb-5 container feel">
-      <label for="feelings" class="form-label">How are you feeling today?</label>
-      <textarea class="myInput form-control mb-5" id="feelings" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
+      <label for="feeling" class="form-label">How are you feeling today?</label>
+      <textarea class="myInput form-control mb-5" id="feeling" placeholder="Enter your feelings here" rows="9" cols="50"></textarea>
       <button id="generate" type="submit" class="btn btn-primary w-100"> Generate </button>
     </div>
 
-    <div class="mb-5 container entry">
-      <div class="title">Most Recent Entry</div>
-      <div id="entryHolder">
-        <div id="date"></div>
-        <div id="temp"></div>
-        <div id="content"></div>
+    <div class="container">
+      <div class="entry card text-white bg-primary mb-3">
+        <div class="title card-header">Most Recent Entry</div>
+        <div class="card-body" id="entryHolder">
+          <div id="date"></div>
+          <div id="temp"></div>
+          <div id="content"></div>
+        </div>
       </div>
+
+    </div>
+    
+    <div class="container" id="error">
+      
     </div>
 
   </div>
