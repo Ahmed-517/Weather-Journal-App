@@ -13,46 +13,100 @@ const errorDiv = document.querySelector('#error');
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
-/* Function to GET Project Data */
-const retrieveData = async () => {
+
+// Start Functions
+const getTemprature = async (apiUrl) => {
     try {
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${zipInput.value}&appid=${apiKey}`
         const res = await fetch(apiUrl).then(res => res.json());
         const temprature = await res.main.temp;
-        console.log(temprature);
-        console.log(newDate);
-        console.log(feelingInput.value);
-    
-        await fetch('/post', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                date: newDate,
-                temp: temprature,
-                feeling: feelingInput.value
-            }),
-        });
-        const request = await fetch('/all');
-        // Transform into JSON
-        const allData = await request.json()
-        console.log('alldata', allData)
-        // Write updated data to DOM elements
-        document.getElementById('temp').innerHTML = Math.round(allData.temp) + ' degrees';
-        document.getElementById('content').innerHTML = allData.feeling;
-        document.getElementById("date").innerHTML = allData.date;
-    }
-    catch (error) {
-        console.log("error", error);
-        // appropriately handle the error
-        errorDiv.innerHTML = `
-            <div class="alert alert-danger" role="alert">
-                ${error}
-            </div>
-        `;
-    }
-}
 
-// Event listener
-generateBtn.addEventListener('click', retrieveData)
+        // return temprature from the api
+        return temprature;
+
+    } catch (err) {
+        console.log(err.message);
+        handleError(err);
+    }
+};
+
+
+const setInfo = async (temprature) => {
+    try {
+        const bodyInfo = {
+            date: newDate,
+            temp: temprature,
+            feeling: feelingInput.value
+        };
+        console.log('temprature is', temprature);
+        return bodyInfo;
+
+    } catch (err) {
+        console.log(err);
+        handleError(err)
+    }
+};
+
+
+const postData = async (url = '', bodyInfo = {}) => {
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: "same-origin",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyInfo)
+    });
+    try {
+        const result = await response.json();
+        return result;
+    } catch (err) {
+        console.error(err);
+        handleError(error)
+    }
+};
+const getAll = async (url) => {
+    const response = await fetch(url);
+    try {
+        const allData = await response.json();
+        return allData;
+    } catch (err) {
+        console.error(err);
+        handleError(error)
+    }
+};
+const showResult = async (allData) => {
+
+    document.getElementById('temp').innerHTML = Math.round(allData.temp) + ' degrees';
+    document.getElementById('content').innerHTML = allData.feeling;
+    document.getElementById("date").innerHTML = allData.date;
+
+};
+// End Functions
+
+// Start EventListner
+generateBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?zip=${zipInput.value}&appid=${apiKey}`
+    getTemprature(apiUrl).
+        then((temprature) => {
+            setInfo(temprature).
+                then((bodyInfo) => {
+                    postData("/post", bodyInfo).
+                        then((allData) => {
+                            getAll("/all").
+                                then(allData => {
+                                    showResult(allData);
+                                });
+                        });
+                });
+        });
+});
+
+
+// appropriately handle the error
+function handleError(error) {
+    errorDiv.innerHTML = `
+    <div class="alert alert-danger" role="alert">
+        ${error}
+    </div>`;
+}
