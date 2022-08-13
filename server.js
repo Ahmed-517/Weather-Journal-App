@@ -7,7 +7,6 @@ projectData = {};
 
 // Require Express to run server and routes
 const express = require('express');
-const { request } = require('http');
 
 // Start up an instance of app
 const app = express()
