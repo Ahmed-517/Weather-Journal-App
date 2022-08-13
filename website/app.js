@@ -1,17 +1,17 @@
 // Personal API Key for OpenWeatherMap API
-let apiKey = 'cd9daeb0b94b7da5c52304970af4c0a9';
-apiKey += '&units=metric';  // to get the celicius value
+const apiKey = 'cd9daeb0b94b7da5c52304970af4c0a9&units=imperial';
+
 
 /* Global Variables */
 const zipInput = document.querySelector('#zip');
-const feelingInput = document.querySelector('#feeling');
+const feelingInput = document.querySelector('#feelings');
 const generateBtn = document.querySelector('#generate');
 const errorDiv = document.querySelector('#error');
 
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
+let newDate = (d.getMonth()+1) + "." + d.getDate() + "." + d.getFullYear();
 
 
 // Start Functions
